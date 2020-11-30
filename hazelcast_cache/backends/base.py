@@ -74,8 +74,8 @@ class BaseHazelcastCache(BaseCache):
         config = hazelcast.ClientConfig()
         config.group_config.name = self.options.get('GROUP_NAME', None)
         config.group_config.password = self.options.get('GROUP_PASSWORD', None)
-        config.network_config.connection_attempt_limit = 1
-        config.network_config.addresses.append(self.params.get('LOCATION', None))
+        config.network_config.connection_attempt_limit = self.options.get('CONNECTION_ATTEMPT_LIMIT', 3)
+        config.network_config.addresses.append(self.server)
 
         client = hazelcast.HazelcastClient(config)
 
