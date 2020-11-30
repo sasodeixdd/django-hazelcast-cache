@@ -47,7 +47,7 @@ class BaseHazelcastCache(BaseCache):
         self.params = params or {}
         self.options = params.get('OPTIONS', {})
         self.client = self.create_client()
-        self.map_key = 'map'
+        self.map_key = self.options.get('MAP_KEY', 'map')
         self.password = self.get_password()
 
         # Serializer
