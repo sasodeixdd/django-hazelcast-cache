@@ -72,10 +72,10 @@ class BaseHazelcastCache(BaseCache):
         logging.getLogger().setLevel(logging.WARNING)
 
         config = hazelcast.ClientConfig()
-        config.group_config.name = "dev"
-        config.group_config.password = "dev-pass"
+        config.group_config.name = self.options.get('GROUP_NAME', None)
+        config.group_config.password = self.options.get('GROUP_PASSWORD', None)
         config.network_config.connection_attempt_limit = 1
-        config.network_config.addresses.append('172.17.42.1:5701')
+        config.network_config.addresses.append(self.params.get('LOCATION', None))
 
         client = hazelcast.HazelcastClient(config)
 
@@ -174,7 +174,7 @@ class BaseHazelcastCache(BaseCache):
 
         return self.get_value(value)
 
-    def _set(self, client, key, value, timeout):
+    def _set(self, client, key, value, timeout=DEFAULT_TIMEOUT):
         # https://github.com/hazelcast/hazelcast-python-client/blob/b033b8c26b4a932c84737a33f010d01b3910a87a/hazelcast/proxy/map.py
         return client.get_map(self.map_key).put(key, value, timeout)
 
